@@ -67,7 +67,7 @@ export default function Home() {
                 Mulai Berdonasi
               </Link>
               <Link href='/kegiatan' className="px-8 py-4 bg-white border border-gray-200 text-gray-700 text-lg font-bold rounded-2xl hover:bg-gray-50 transition-all">
-                Lihat Program Kami
+                Artikel & Kegiatan kami
               </Link>
             </div>
           </div>
