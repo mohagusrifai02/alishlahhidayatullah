@@ -104,7 +104,7 @@ export default function ProgramPage() {
       {/* Navbar Simple */}
       <nav className="p-6 bg-white border-b">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="font-bold text-xl text-red-600">Yayasan Kita</Link>
+          <Link href="/" className="font-bold text-xl text-red-600">Yayasan Al-Ishlah</Link>
           <Link href="/" className="text-gray-600 hover:text-red-600">Kembali ke Beranda</Link>
         </div>
       </nav>

@@ -236,6 +236,7 @@ export default function NewsDetail() {
               >
                 ❤️ {likesCount} {likesCount === 1 ? 'Suka' : 'Suka'}
               </button>
+              <Link href='/program' className="px-4 py-2 rounded font-semibold transition bg-gray-200 text-gray-800 hover:bg-gray-300">Donasi yuk!</Link>
             </div>
 
             <h3 className="font-semibold text-gray-800 mb-4">Bagikan Artikel Ini</h3>
@@ -331,29 +332,28 @@ export default function NewsDetail() {
       <footer className="bg-red-900 text-white py-12 mt-16">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Pemhida Tegal</h3>
+            <h3 className="text-2xl font-bold mb-4">Yayasan Al-Ishlah</h3>
             <p className="text-red-100">
-              Organisasi sosial yang peduli dengan pemberdayaan masyarakat.
+              Official website of Yayasan Al-Ishlah, dedicated to empowering communities through education, health, and humanitarian programs. Join us in making a difference!
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Menu Utama</h4>
             <ul className="space-y-2 text-red-100">
               <li><Link href="/" className="hover:text-white">Beranda</Link></li>
-              <li><Link href="/news" className="hover:text-white">Berita & Artikel</Link></li>
-              <li><Link href="/services" className="hover:text-white">Layanan</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Kontak</Link></li>
+              <li><Link href="/program" className="hover:text-white">Program</Link></li>
+              <li><Link href="/kegiatan" className="hover:text-white">Kegiatan</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Kontak</h4>
             <p className="text-red-100 mb-2">📍 Tegal, Jawa Tengah</p>
             <p className="text-red-100 mb-2">📞 +6289516589293</p>
-            <p className="text-red-100">📧 info@pemhida.tegal</p>
+            <p className="text-red-100">📧 info@alishlah.tegal</p>
           </div>
         </div>
         <div className="border-t border-red-800 mt-8 pt-8 text-center text-red-100">
-          <p>&copy; 2026 Pemuda Hidayatullah Tegal. All rights reserved.</p>
+          <p>&copy; 2026 Yayasan Al-Ishlah. All rights reserved.</p>
         </div>
       </footer>
     </div>
