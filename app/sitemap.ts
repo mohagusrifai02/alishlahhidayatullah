@@ -1,16 +1,16 @@
 // app/sitemap.ts
 import { MetadataRoute } from "next";
+import dbConnect from "@/lib/mongodb";
+import { News } from "@/models/News";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://lksa.alishlahtegal.net";
 
-  const res = await fetch(`${baseUrl}/api/news`, {
-    cache: "no-store",
-  });
+  await dbConnect();
+  // Ambil data langsung dari MongoDB
+  const allNews = await News.find({}).select('_id updatedAt').lean();
 
-  const news = await res.json();
-
-  const newsUrls = news.map((item: any) => ({
+  const newsUrls = allNews.map((item: any) => ({
     url: `${baseUrl}/kegiatan/${item._id}`, // atau item.id / item.slug
     lastModified: item.updatedAt
       ? new Date(item.updatedAt)
