@@ -10,6 +10,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const news = await res.json();
 
+  const newsUrls = news.map((item: any) => ({
+    url: `${baseUrl}/kegiatan/${item._id}`, // atau item.id / item.slug
+    lastModified: item.updatedAt
+      ? new Date(item.updatedAt)
+      : new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
   return [
     {
       url: `${baseUrl}`,
@@ -29,11 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    ...news.map((item: any) => ({
-      url: `${baseUrl}/kegiatan/${item.id}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    })),
+    ...newsUrls,
   ];
 }
