@@ -4,11 +4,11 @@ import { MetadataRoute } from "next";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://lksa.alishlahtegal.net";
 
-  const res = await fetch(`${baseUrl}/api/kegiatan`, {
+  const res = await fetch(`${baseUrl}/api/news`, {
     cache: "no-store",
   });
 
-  const kegiatan = await res.json();
+  const news = await res.json();
 
   return [
     {
@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    ...kegiatan.map((item: any) => ({
+    ...news.map((item: any) => ({
       url: `${baseUrl}/kegiatan/${item.id}`,
       lastModified: new Date(),
       changeFrequency: "monthly",
