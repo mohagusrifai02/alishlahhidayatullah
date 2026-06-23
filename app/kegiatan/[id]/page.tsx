@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
+import CopyButton from '@/components/CopyButton';
 
 interface News {
   _id: string;
@@ -239,6 +240,27 @@ export default function NewsDetail() {
               <Link href='/program' className="px-4 py-2 rounded font-semibold transition bg-gray-200 text-gray-800 hover:bg-gray-300">Donasi yuk!</Link>
             </div>
 
+            <h3 className="font-semibold text-gray-800 mb-4">Donasi Manual</h3>
+            <div className="flex gap-4 items-center mb-6">
+              <span className="text-gray-700">Nama Bank :</span>
+              <span className="text-gray-700">BRI</span>
+            </div>
+            <div className="flex gap-4 items-center mb-6">
+              <span className="text-gray-700">Atas nama :</span>
+              <span className="text-gray-700">Yayasan Al Ishlah</span>
+              <CopyButton text="Yayasan Al Ishlah" />
+            </div>
+            <div className="flex gap-4 items-center mb-6">
+              <span className="text-gray-700">No Rek :</span>
+              <span className="text-gray-700">010101014120507</span>
+              <CopyButton text="010101014120507" />
+            </div>
+            <div className="flex gap-4 items-center mb-6">
+              <span className="text-gray-700">Konfirmasi WA :</span>
+              <span className="text-gray-700">089516589293</span>
+              <CopyButton text="089516589293" />
+            </div>
+
             <h3 className="font-semibold text-gray-800 mb-4">Bagikan Artikel Ini</h3>
             <div className="flex gap-4">
               <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(news.title)}`} 
@@ -248,6 +270,13 @@ export default function NewsDetail() {
               <a href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}`}
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Facebook
+              </a>
+              <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(news.title + ' ' + (typeof window !== 'undefined' ? window.location.href : ''))}`}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WhatsApp
               </a>
             </div>
           </div>
