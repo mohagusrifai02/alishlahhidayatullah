@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
@@ -53,12 +56,22 @@ export default function Home() {
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-6">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-6"
+            >
               Membangun Harapan, <span className="text-red-600">Mengubah Masa Depan.</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-10 leading-relaxed">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-xl text-gray-600 mb-10 leading-relaxed"
+            >
               Setiap donasi yang Anda berikan adalah langkah nyata untuk membantu pendidikan, kesehatan, dan kesejahteraan mereka yang membutuhkan.
-            </p>
+            </motion.p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/program"
@@ -83,26 +96,44 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Tentang Kami</h2>
               <div className="space-y-6">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  viewport={{ once: true }}
+                >
                   <h3 className="text-xl font-bold text-red-600 mb-2">Sejarah Pendirian</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Yayasan Kita didirikan pada tahun 2010 berawal dari kepedulian sekelompok pemuda terhadap kondisi pendidikan anak-anak di pinggiran kota. Seiring berjalannya waktu, yayasan ini tumbuh menjadi lembaga sosial yang berfokus pada pemberdayaan masyarakat secara menyeluruh.
                   </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-red-600 mb-2">Visi</h3>
-                    <p className="text-gray-600 italic">"Menjadi lembaga filantropi terdepan yang amanah dan profesional dalam mewujudkan kesejahteraan umat."</p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-red-600 mb-2">Visi</h3>
+                      <p className="text-gray-600 italic">"Menjadi lembaga filantropi terdepan yang amanah dan profesional dalam mewujudkan kesejahteraan umat."</p>
+                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                      viewport={{ once: true }}
+                    >
+                      <h3 className="text-xl font-bold text-red-600 mb-2">Misi</h3>
+                      <ul className="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Pendidikan yatim & dhuafa</li>
+                        <li>Bantuan sosial tepat sasaran</li>
+                        <li>Dakwah Islam moderat</li>
+                      </ul>
+                    </motion.div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-red-600 mb-2">Misi</h3>
-                    <ul className="list-disc list-inside text-gray-600 space-y-1">
-                      <li>Pendidikan yatim & dhuafa</li>
-                      <li>Bantuan sosial tepat sasaran</li>
-                      <li>Dakwah Islam moderat</li>
-                    </ul>
-                  </div>
-                </div>
+                </motion.div>
               </div>
             </div>
             <div className="relative h-[500px] flex items-center justify-center group">
@@ -133,7 +164,12 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-4">Program Utama</h2>
             <p className="text-gray-600">Fokus kami dalam menciptakan perubahan nyata di tengah masyarakat.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { title: "Pendidikan", desc: "Beasiswa anak yatim, renovasi sarana belajar, dan pengadaan alat peraga pendidikan untuk masa depan cerah.", icon: "📚" },
               { title: "Sosial", desc: "Bantuan logistik bencana alam, santunan sembako rutin, dan program pemberdayaan ekonomi umat.", icon: "🤝" },
@@ -145,7 +181,7 @@ export default function Home() {
                 <p className="text-gray-600 leading-relaxed">{item.desc}</p>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
