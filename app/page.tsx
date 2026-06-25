@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import NewsSlider from "@/components/NewsSlider";
 
 export default function Home() {
   return (
@@ -88,6 +89,18 @@ export default function Home() {
         {/* Dekorasi Background */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-red-50/50 rounded-full blur-3xl -z-0 pointer-events-none"></div>
       </header>
+
+      {/* News Slider Section */}
+
+      <section className="mx-auto max-w-7xl px-4 py-10">
+        <h2 className="mb-8 text-center text-3xl font-bold">
+          Kegiatan Terbaru
+        </h2>
+
+        <NewsSlider />
+      </section>
+
+      {/* News Slider Section */}
 
       {/* About Us Section */}
       <section id="about" className="py-24 bg-white">
