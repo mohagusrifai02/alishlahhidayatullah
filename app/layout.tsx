@@ -15,6 +15,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Yayasan Al-Ishlah Hidayatullah",
   description: "Official website of Yayasan Al-Ishlah Hidayatullah Kabupaten Tegal",
+  icons:{
+    icon: "/logo.ico"
+  },
+  openGraph:{
+    title:"Yayasan Al-Ishlah",
+    description:"Official Website Yayasan Al-Ishlah Hidayatullah Kabupaten Tegal",
+    url:"https://www.alishlahtegal.net/",
+    siteName:"Yayasan Al-Ishlah",
+    images:[
+      {
+        url:'https://www.alishlahtegal.net/logo.jpeg',
+        width:800,
+        height:600,
+      }
+    ]
+  }
 };
 
 export default function RootLayout({
