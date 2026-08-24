@@ -8,6 +8,7 @@ export interface INews {
   content: string;
   excerpt: string;
   image: string;
+  subImage?: string;
   author: string;
   authorId?: string;
   publishedAt: Date;
@@ -45,6 +46,10 @@ const newsSchema = new mongoose.Schema<INews>(
     image: {
       type: String,
       required: [true, 'Silakan masukkan URL gambar'],
+    },
+    subImage: {
+      type: String,
+      default: '',
     },
     author: {
       type: String,

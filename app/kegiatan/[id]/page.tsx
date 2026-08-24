@@ -12,6 +12,7 @@ interface News {
   content: string;
   excerpt: string;
   image: string;
+  subImage?: string;
   category: string;
   author: string;
   publishedAt: string;
@@ -216,12 +217,26 @@ export default function NewsDetail() {
             />
           </div>
 
+          
           <div className="prose prose-red max-w-full mb-12">
             <p className="text-lg text-gray-700 mb-6">{news.excerpt}</p>
             <div className="text-gray-700 whitespace-pre-wrap break-words">
               {news.content}
             </div>
           </div>
+
+          {news.subImage && (
+            <div className="relative w-full h-80 mb-8 rounded-lg overflow-hidden">
+              <Image
+                src={news.subImage}
+                alt={`${news.title} - sub image`}
+                fill
+                unoptimized
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
+          )}
 
           {/* Like & Share Section */}
           <div className="border-t border-gray-200 pt-8">

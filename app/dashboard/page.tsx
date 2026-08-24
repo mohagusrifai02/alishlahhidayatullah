@@ -10,6 +10,7 @@ interface News {
   category: string;
   author: string;
   publishedAt: string;
+  subImage?: string;
 }
 
 interface NewsForm {
@@ -18,6 +19,7 @@ interface NewsForm {
   content: string;
   excerpt: string;
   image: string;
+  subImage: string;
   author: string;
 }
 
@@ -38,6 +40,7 @@ export default function Dashboard() {
     content: '',
     excerpt: '',
     image: '',
+    subImage: '',
     author: '',
   });
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -190,6 +193,46 @@ export default function Dashboard() {
     }));
   };
 
+  const handleImageUpload = async (field: 'image' | 'subImage', file: File | null) => {
+    if (!file) return;
+
+    try {
+      setError('');
+      setSuccess('');
+
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('field', field);
+      if (editingId) {
+        uploadFormData.append('newsId', editingId);
+      }
+
+      const response = await fetch('/api/news/upload', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || 'Upload gambar gagal');
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [field]: data.data.url,
+      }));
+
+      setSuccess(
+        field === 'image'
+          ? 'Gambar utama berhasil diupload ke Cloudinary.'
+          : 'Sub image berhasil diupload ke Cloudinary.'
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gagal mengupload gambar');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -246,7 +289,8 @@ export default function Dashboard() {
               category: data.data.category,
               content: data.data.content,
               excerpt: data.data.excerpt,
-              image: data.data.image,
+              image: data.data.image || '',
+              subImage: data.data.subImage || '',
               author: data.data.author,
             });
           }
@@ -282,6 +326,7 @@ export default function Dashboard() {
       content: '',
       excerpt: '',
       image: '',
+      subImage: '',
       author: currentUser?.name || '',
     });
     setEditingId(null);
@@ -500,20 +545,49 @@ export default function Dashboard() {
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                      URL Gambar
-                    </label>
-                    <input
-                      type="url"
-                      id="image"
-                      name="image"
-                      value={formData.image}
-                      onChange={handleInputChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                      placeholder="https://..."
-                    />
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                        Gambar Utama
+                      </label>
+                      <input
+                        type="url"
+                        id="image"
+                        name="image"
+                        value={formData.image}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        placeholder="https://..."
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload('image', e.target.files?.[0] ?? null)}
+                        className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="subImage" className="block text-sm font-medium text-gray-700">
+                        Sub Image (opsional)
+                      </label>
+                      <input
+                        type="url"
+                        id="subImage"
+                        name="subImage"
+                        value={formData.subImage}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        placeholder="https://..."
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload('subImage', e.target.files?.[0] ?? null)}
+                        className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      />
+                    </div>
                   </div>
 
                   <div>
