@@ -81,7 +81,10 @@ export default function Home() {
                 Mulai Berdonasi
               </Link>
               <Link href='/kegiatan' className="px-8 py-4 bg-white border border-gray-200 text-gray-700 text-lg font-bold rounded-2xl hover:bg-gray-50 transition-all">
-                Artikel & Kegiatan kami
+                Artikel & Kegiatan
+              </Link>
+              <Link href='/dermawan' className="px-8 py-4 bg-white border border-gray-200 text-gray-700 text-lg font-bold rounded-2xl hover:bg-gray-50 transition-all">
+                Daftar Dermawan
               </Link>
             </div>
           </div>

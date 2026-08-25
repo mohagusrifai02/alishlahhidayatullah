@@ -24,14 +24,25 @@ interface NewsForm {
 }
 
 export default function Dashboard() {
-  const [tab, setTab] = useState<'news' | 'users' | 'contacts' | 'comments'>('news');
+  const [tab, setTab] = useState<'news' | 'donatur' | 'users' | 'contacts' | 'comments'>('news');
   const [contacts, setContacts] = useState<Array<{_id: string; name: string; email: string; phone?: string; message: string; service?: string; createdAt: string}>>([]);
   const [contactCount, setContactCount] = useState<number>(0);
   const [news, setNews] = useState<News[]>([]);
+  const [donaturList, setDonaturList] = useState<Array<{_id: string; namaDonatur: string; kategori: string; bulan: string; tahun: number; nominal: number; createdAt: string}>>([]);
+  const [donaturForm, setDonaturForm] = useState({
+    namaDonatur: '',
+    kategori: 'tetap',
+    bulan: '',
+    tahun: new Date().getFullYear().toString(),
+    nominal: '',
+  });
+  const [showDonaturForm, setShowDonaturForm] = useState(false);
   const [totalNewsCount, setTotalNewsCount] = useState<number>(0);
   const [totalViews, setTotalViews] = useState<number>(0);
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [totalComments, setTotalComments] = useState<number>(0);
+  const [totalDonatur, setTotalDonatur] = useState<number>(0);
+  const [totalNominalDonatur, setTotalNominalDonatur] = useState<number>(0);
   const [allComments, setAllComments] = useState<Array<{_id: string; name: string; text: string; createdAt: string}>>([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<NewsForm>({
@@ -78,6 +89,7 @@ export default function Dashboard() {
       fetchContactCount();
       fetchNewsSummary();
       fetchCommentsSummary();
+      fetchDonatur();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading]);
@@ -85,6 +97,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (tab === 'news') {
       fetchNews();
+    } else if (tab === 'donatur') {
+      fetchDonatur();
     } else if (tab === 'contacts') {
       fetchContacts();
     } else if (tab === 'comments') {
@@ -164,6 +178,68 @@ export default function Dashboard() {
     } catch (err) {
       setTotalComments(0);
       setAllComments([]);
+    }
+  };
+
+  const fetchDonatur = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/donatur');
+      const data = await response.json();
+      if (data.success && Array.isArray(data.data)) {
+        const list = data.data;
+        setDonaturList(list);
+        setTotalDonatur(list.length);
+        setTotalNominalDonatur(list.reduce((sum: number, item: any) => sum + Number(item.nominal || 0), 0));
+      } else {
+        setDonaturList([]);
+        setTotalDonatur(0);
+        setTotalNominalDonatur(0);
+      }
+    } catch (err) {
+      setDonaturList([]);
+      setTotalDonatur(0);
+      setTotalNominalDonatur(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddDonatur = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await fetch('/api/donatur', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namaDonatur: donaturForm.namaDonatur,
+          kategori: donaturForm.kategori,
+          bulan: donaturForm.bulan,
+          tahun: Number(donaturForm.tahun),
+          nominal: Number(donaturForm.nominal),
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Gagal menambahkan data donatur');
+      }
+
+      setSuccess('Data donatur berhasil ditambahkan');
+      setDonaturForm({
+        namaDonatur: '',
+        kategori: 'tetap',
+        bulan: '',
+        tahun: new Date().getFullYear().toString(),
+        nominal: '',
+      });
+      setShowDonaturForm(false);
+      fetchDonatur();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat menambahkan donatur');
     }
   };
 
@@ -366,7 +442,7 @@ export default function Dashboard() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6">
           <button
             onClick={() => setTab('news')}
             className={`px-6 py-2 rounded-lg font-semibold transition ${
@@ -376,6 +452,21 @@ export default function Dashboard() {
             }`}
           >
             📰 Kelola Berita & Artikel
+          </button>
+          <button
+            onClick={() => setTab('donatur')}
+            className={`px-6 py-2 rounded-lg font-semibold transition ${
+              tab === 'donatur'
+                ? 'bg-green-700 text-white'
+                : 'bg-white text-gray-800 hover:bg-gray-100'
+            }`}
+          >
+            <span className="inline-flex items-center gap-2">
+              💰 Donatur
+              <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-500 text-white">
+                {totalDonatur}
+              </span>
+            </span>
           </button>
           <button
             onClick={() => setTab('users')}
@@ -419,7 +510,7 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="grid gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-6">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <p className="text-sm text-gray-500">Total Berita & Artikel</p>
             <p className="mt-4 text-3xl font-semibold text-gray-900">{totalNewsCount}</p>
@@ -439,6 +530,16 @@ export default function Dashboard() {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <p className="text-sm text-gray-500">Total Komentar</p>
             <p className="mt-4 text-3xl font-semibold text-gray-900">{totalComments}</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <p className="text-sm text-gray-500">Total Donatur</p>
+            <p className="mt-4 text-3xl font-semibold text-gray-900">{totalDonatur}</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <p className="text-sm text-gray-500">Nominal Donatur</p>
+            <p className="mt-4 text-3xl font-semibold text-gray-900">
+              {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalNominalDonatur)}
+            </p>
           </div>
         </div>
 
@@ -660,6 +761,158 @@ export default function Dashboard() {
                             >
                               Hapus
                             </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Donatur Tab */}
+        {tab === 'donatur' && (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold">Daftar Donatur</h2>
+              {!showDonaturForm ? (
+                <button
+                  type="button"
+                  onClick={() => setShowDonaturForm(true)}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  + Add Donatur
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowDonaturForm(false)}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                >
+                  Batal
+                </button>
+              )}
+            </div>
+
+            {showDonaturForm && (
+              <form onSubmit={handleAddDonatur} className="bg-white rounded-lg shadow-md p-6 space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nama Donatur</label>
+                    <input
+                      type="text"
+                      value={donaturForm.namaDonatur}
+                      onChange={(e) => setDonaturForm((prev) => ({ ...prev, namaDonatur: e.target.value }))}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      placeholder="Contoh: Budi Santoso"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                    <select
+                      value={donaturForm.kategori}
+                      onChange={(e) => setDonaturForm((prev) => ({ ...prev, kategori: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    >
+                      <option value="tetap">Tetap</option>
+                      <option value="kaleng">Kaleng</option>
+                      <option value="kotak">Kotak</option>
+                      <option value="zakat">Zakat</option>
+                      <option value="isidental">Isidental</option>
+                      <option value="program">Program</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
+                    <input
+                      type="text"
+                      value={donaturForm.bulan}
+                      onChange={(e) => setDonaturForm((prev) => ({ ...prev, bulan: e.target.value }))}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      placeholder="Contoh: Agustus"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
+                    <input
+                      type="number"
+                      min="2000"
+                      value={donaturForm.tahun}
+                      onChange={(e) => setDonaturForm((prev) => ({ ...prev, tahun: e.target.value }))}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      placeholder="2026"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nominal</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={donaturForm.nominal}
+                      onChange={(e) => setDonaturForm((prev) => ({ ...prev, nominal: e.target.value }))}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                      placeholder="500000"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                >
+                  Simpan Donatur
+                </button>
+              </form>
+            )}
+
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              {loading ? (
+                <div className="p-6 text-center">Loading...</div>
+              ) : donaturList.length === 0 ? (
+                <div className="p-6 text-center text-gray-500">Belum ada data donatur</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Nama Donatur</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Kategori</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Bulan</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Tahun</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Nominal</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Tanggal</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {donaturList.map((item) => (
+                        <tr key={item._id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.namaDonatur}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs font-semibold capitalize">
+                              {item.kategori}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{item.bulan}</td>
+                          <td className="px-6 py-4 text-sm text-gray-700">{item.tahun}</td>
+                          <td className="px-6 py-4 text-sm text-gray-900 font-semibold">
+                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.nominal)}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {new Date(item.createdAt).toLocaleDateString('id-ID', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            })}
                           </td>
                         </tr>
                       ))}
