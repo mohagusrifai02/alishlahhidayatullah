@@ -117,7 +117,7 @@ export default function Home() {
                 >
                   <h3 className="text-xl font-bold text-red-600 mb-2">Sejarah Pendirian</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Yayasan Kita didirikan pada tahun 2010 berawal dari kepedulian sekelompok pemuda terhadap kondisi pendidikan anak-anak di pinggiran kota. Seiring berjalannya waktu, yayasan ini tumbuh menjadi lembaga sosial yang berfokus pada pemberdayaan masyarakat secara menyeluruh.
+                    Yayasan Kita didirikan pada tahun 1995. Sejak awal, kami berkomitmen untuk melayani anak yatim piatu, dan dhuafa dengan tempat tinggal yang layak, pendidikan yang berkualitas, dan dukungan sosial yang berkelanjutan. Dengan pengalaman lebih dari 25 tahun, kami telah menjadi lembaga filantropi yang dipercaya oleh masyarakat.
                   </p>
                 </motion.div>
 
@@ -130,7 +130,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                     <div>
                       <h3 className="text-xl font-bold text-red-600 mb-2">Visi</h3>
-                      <p className="text-gray-600 italic">"Menjadi lembaga filantropi terdepan yang amanah dan profesional dalam mewujudkan kesejahteraan umat."</p>
+                      <p className="text-gray-600 italic">"Menjadi lembaga filantropi terdepan yang amanah dan profesional dalam membangun peradaban islam dan kesejahteraan umat."</p>
                     </div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -140,9 +140,9 @@ export default function Home() {
                     >
                       <h3 className="text-xl font-bold text-red-600 mb-2">Misi</h3>
                       <ul className="list-disc list-inside text-gray-600 space-y-1">
-                        <li>Pendidikan yatim & dhuafa</li>
-                        <li>Bantuan sosial tepat sasaran</li>
-                        <li>Dakwah Islam moderat</li>
+                        <li>Mengakomodir dan memfasilitasi usaha-usaha dan pemberdayaan masyarakat sesuai dengan kebutuhannya</li>
+                        <li>Membentuk sebuah sistem sosial, pendidikan dan pembinaan yang berpihak kepada masyarakat marjinal, demi terwujudnya masyarakat yang berkeadilan dan berperadaban.</li>
+                        <li>Mendidik dan membentuk kader yang memiliki militansi yang tinggi sehingga siap menghadapi tantangan zaman dengan segala permasalahannya, dan sekaligus siap menjalankan fungsinya dalam bidang sosial, pendidikan dan dakwah.</li>
                       </ul>
                     </motion.div>
                   </div>
